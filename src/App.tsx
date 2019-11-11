@@ -1,37 +1,58 @@
-import logo from "./logo.svg";
+import { Link, RouteComponentProps, Router } from "@reach/router";
+import React from "react";
 import "./App.css";
-import { Typography, Divider, Button, PageHeader } from "antd";
-import { Layout, Menu, Breadcrumb } from "antd";
-import { Row, Col } from "antd";
-import React, { useState } from "react";
 import SimpleCounter from "./SimpleCounter";
-import { Router, Link } from "@reach/router";
-import { RouteComponentProps } from "@reach/router";
 import SimpleList from "./SimpleList";
+import { ApolloProvider } from "react-apollo";
+import ApolloClient, { InMemoryCache } from "apollo-boost";
+import { PageHeader, Menu } from "antd";
+import GITHUB_TOKEN from "./Constants";
 
-const { Header, Content, Footer } = Layout;
-const { Title, Paragraph, Text } = Typography;
+const client = new ApolloClient({
+  uri: "https://api.github.com/graphql",
+  request: operation => {
+    operation.setContext({
+      headers: {
+        authorization: `Bearer ${GITHUB_TOKEN}`
+      }
+    });
+  },
+  cache: new InMemoryCache()
+});
 
 const App: React.FC = () => {
-  const HomePath: React.FC<RouteComponentProps> = () => {
+  const HomePath: React.FC<RouteComponentProps<{ komoro: string }>> = ({
+    children,
+    komoro
+  }) => {
     return (
       <div>
-        <h1>Home</h1>
+        <small>
+          You are running this application in <b>{process.env.NODE_ENV}</b>{" "}
+          mode.
+        </small>
+
+        <PageHeader title="Rumah" />
+        <Menu></Menu>
         <nav>
           <Link to="/">Home</Link> |{" "}
           <Link to="simple_counter">Simple Counter</Link> |{" "}
           <Link to="simple_list">Simple List</Link> |{" "}
         </nav>
+        {children}
       </div>
     );
   };
 
   return (
-    <Router>
-      <HomePath path="/" />
-      <SimpleCounter path="simple_counter" />
-      <SimpleList path="simple_list" />
-    </Router>
+    <ApolloProvider client={client}>
+      <Router>
+        <HomePath path="/" komoro="lala">
+          <SimpleCounter path="simple_counter" />
+          <SimpleList path="simple_list" />
+        </HomePath>
+      </Router>
+    </ApolloProvider>
   );
 };
 
