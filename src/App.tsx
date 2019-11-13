@@ -5,9 +5,13 @@ import SimpleCounter from "./SimpleCounter";
 import SimpleList from "./SimpleList";
 import { ApolloProvider } from "react-apollo";
 import ApolloClient, { InMemoryCache } from "apollo-boost";
-import { PageHeader, Menu } from "antd";
+import { PageHeader, Menu, Layout, Row, Col } from "antd";
 import GITHUB_TOKEN from "./Constants";
 import { ClickParam } from "antd/lib/menu";
+import { Typography } from "antd";
+import ExampleForm from "./ExampleForm";
+import ExamplePagination from "./ExamplePagination";
+import ExampleSearch from "./ExampleSearch";
 
 const client = new ApolloClient({
   uri: "https://api.github.com/graphql",
@@ -57,6 +61,9 @@ const App: React.FC = () => {
         <HomePath path="/">
           <SimpleCounter default path="simple_counter" />
           <SimpleList path="simple_list" />
+          <ExampleSearch path="search" />
+          <ExamplePagination path="pagination" />
+          <ExampleForm path="form" />
         </HomePath>
       </Router>
     </ApolloProvider>
