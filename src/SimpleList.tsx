@@ -62,9 +62,6 @@ const SimpleList: React.FC<RouteComponentProps> = () => {
   return (
     <div>
       <PageHeader
-        style={{
-          border: "1px solid blue"
-        }}
         title={`${githubLoginHandler}'s Repositories`}
       />
       <List

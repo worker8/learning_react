@@ -1,4 +1,4 @@
-import { Link, RouteComponentProps, Router } from "@reach/router";
+import { Link, RouteComponentProps, Router, navigate } from "@reach/router";
 import React from "react";
 import "./App.css";
 import SimpleCounter from "./SimpleCounter";
@@ -7,6 +7,7 @@ import { ApolloProvider } from "react-apollo";
 import ApolloClient, { InMemoryCache } from "apollo-boost";
 import { PageHeader, Menu } from "antd";
 import GITHUB_TOKEN from "./Constants";
+import { ClickParam } from "antd/lib/menu";
 
 const client = new ApolloClient({
   uri: "https://api.github.com/graphql",
@@ -22,23 +23,29 @@ const client = new ApolloClient({
 
 const App: React.FC = () => {
   const HomePath: React.FC<RouteComponentProps<{ komoro: string }>> = ({
-    children,
-    komoro
+    children
   }) => {
+    const onClickHandler = (e: ClickParam) => {
+      //console.log("click", e);
+      navigate(e.key);
+      // router?
+    };
     return (
       <div>
-        <small>
-          You are running this application in <b>{process.env.NODE_ENV}</b>{" "}
-          mode.
-        </small>
-
-        <PageHeader title="Rumah" />
-        <Menu></Menu>
-        <nav>
-          <Link to="/">Home</Link> |{" "}
-          <Link to="simple_counter">Simple Counter</Link> |{" "}
-          <Link to="simple_list">Simple List</Link> |{" "}
-        </nav>
+        <PageHeader title="React Playground" />
+        <Menu
+          theme="light"
+          mode="horizontal"
+          onClick={onClickHandler}
+          // defaultSelectedKeys={["simple_counter"]}
+          style={{ lineHeight: "64px" }}
+        >
+          <Menu.Item key="simple_counter">Simple Counter</Menu.Item>
+          <Menu.Item key="simple_list">Simple List</Menu.Item>
+          <Menu.Item key="search">Search</Menu.Item>
+          <Menu.Item key="pagination">Pagination</Menu.Item>
+          <Menu.Item key="form">Form</Menu.Item>
+        </Menu>
         {children}
       </div>
     );
@@ -47,8 +54,8 @@ const App: React.FC = () => {
   return (
     <ApolloProvider client={client}>
       <Router>
-        <HomePath path="/" komoro="lala">
-          <SimpleCounter path="simple_counter" />
+        <HomePath path="/">
+          <SimpleCounter default path="simple_counter" />
           <SimpleList path="simple_list" />
         </HomePath>
       </Router>
