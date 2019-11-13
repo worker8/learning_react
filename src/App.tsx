@@ -36,6 +36,7 @@ const App: React.FC = () => {
     };
     return (
       <div>
+
         <PageHeader title="React Playground" />
         <Menu
           theme="light"
@@ -50,6 +51,7 @@ const App: React.FC = () => {
           <Menu.Item key="pagination">Pagination</Menu.Item>
           <Menu.Item key="form">Form</Menu.Item>
         </Menu>
+
         {children}
       </div>
     );
@@ -61,7 +63,8 @@ const App: React.FC = () => {
         <HomePath path="/">
           <SimpleCounter default path="simple_counter" />
           <SimpleList path="simple_list" />
-          <ExampleSearch path="search" />
+
+          <ExampleSearch path="search"/>
           <ExamplePagination path="pagination" />
           <ExampleForm path="form" />
         </HomePath>
