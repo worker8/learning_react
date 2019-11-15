@@ -25,12 +25,11 @@ const client = new ApolloClient({
 });
 
 const App: React.FC = () => {
-  const HomePath: React.FC<RouteComponentProps> = (
-    children: RouteComponentProps
-  ) => {
+  const HomePath: React.FC<RouteComponentProps<{ sadasdsadsa: string }>> = ({
+    children
+  }) => {
     const onClickHandler = (e: ClickParam): void => {
       navigate(e.key);
-      return;
     };
     return (
       <div>
@@ -49,7 +48,7 @@ const App: React.FC = () => {
           <Menu.Item key="form">Form</Menu.Item>
         </Menu>
 
-        {children}
+        <div>{children}</div>
       </div>
     );
   };
@@ -60,7 +59,6 @@ const App: React.FC = () => {
         <HomePath path="/">
           <SimpleCounter default path="simple_counter" />
           <SimpleList path="simple_list" />
-
           <ExampleSearch path="search" />
           <ExamplePagination path="pagination" />
           <ExampleForm path="form" />
