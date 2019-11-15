@@ -1,17 +1,16 @@
-import { Link, RouteComponentProps, Router, navigate } from "@reach/router";
-import React from "react";
-import "./App.css";
-import SimpleCounter from "./SimpleCounter";
-import SimpleList from "./SimpleList";
-import { ApolloProvider } from "react-apollo";
-import ApolloClient, { InMemoryCache } from "apollo-boost";
-import { PageHeader, Menu, Layout, Row, Col } from "antd";
-import GITHUB_TOKEN from "./Constants";
+import { navigate, RouteComponentProps, Router } from "@reach/router";
+import { Menu, PageHeader } from "antd";
 import { ClickParam } from "antd/lib/menu";
-import { Typography } from "antd";
+import ApolloClient, { InMemoryCache } from "apollo-boost";
+import React from "react";
+import { ApolloProvider } from "react-apollo";
+import "./App.css";
+import GITHUB_TOKEN from "./Constants";
 import ExampleForm from "./ExampleForm";
 import ExamplePagination from "./ExamplePagination";
 import ExampleSearch from "./ExampleSearch";
+import SimpleCounter from "./SimpleCounter";
+import SimpleList from "./SimpleList";
 
 const client = new ApolloClient({
   uri: "https://api.github.com/graphql",
@@ -26,17 +25,15 @@ const client = new ApolloClient({
 });
 
 const App: React.FC = () => {
-  const HomePath: React.FC<RouteComponentProps<{ komoro: string }>> = ({
-    children
-  }) => {
-    const onClickHandler = (e: ClickParam) => {
-      //console.log("click", e);
+  const HomePath: React.FC<RouteComponentProps> = (
+    children: RouteComponentProps
+  ) => {
+    const onClickHandler = (e: ClickParam): void => {
       navigate(e.key);
-      // router?
+      return;
     };
     return (
       <div>
-
         <PageHeader title="React Playground" />
         <Menu
           theme="light"
@@ -64,7 +61,7 @@ const App: React.FC = () => {
           <SimpleCounter default path="simple_counter" />
           <SimpleList path="simple_list" />
 
-          <ExampleSearch path="search"/>
+          <ExampleSearch path="search" />
           <ExamplePagination path="pagination" />
           <ExampleForm path="form" />
         </HomePath>
