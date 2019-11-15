@@ -1,15 +1,16 @@
 import { RouteComponentProps } from "@reach/router";
-import { Select, Layout, PageHeader, Input, Col, Row, Typography, List } from "antd";
+import { Select, Layout, PageHeader, Modal, Input, Col, Row, Typography, List } from "antd";
 import React, { useState } from "react";
 import "./App.css";
 import locations from "./res/locations.json"
-import data from "./res/random_data.json"
+import originalData from "./res/random_data.json"
 import Fuse from "fuse.js";
+import { ExampleTable } from "./ExampleTable";
 
 const { Option } = Select;
 const { Search } = Input;
 
-type RandomData = {
+export type RandomData = {
   login: string;
   password: string;
   phone: string;
@@ -21,11 +22,19 @@ type RandomData = {
   };
   company: string;
 }
+interface DataProps {
+  dataSet : RandomData[],
+  toDelete? : RandomData | null
+}
+
 const ExampleSearch: React.FC<RouteComponentProps> = () => {
 
   // Search results
-  const emptyData: RandomData[] = [];
-  const [results, setResults] = useState(emptyData);
+  const emptyData : DataProps = {
+    dataSet : originalData,
+    toDelete : null
+  }
+  const [data, setData] = useState(emptyData);
 
   const handleChange = (value: String) => {
     console.log('click ', value);
@@ -36,8 +45,9 @@ const ExampleSearch: React.FC<RouteComponentProps> = () => {
   for (let prefecture of locations.prefectures) {
     options.push(<Option key={prefecture.code}>{prefecture.name}</Option>);
   }
+
   // Search
-  var param = {
+  var fuse = new Fuse(data.dataSet, {
     shouldSort: true,
     threshold: 0.6,
     location: 0,
@@ -48,11 +58,11 @@ const ExampleSearch: React.FC<RouteComponentProps> = () => {
       "name.first",
       "name.last",
       "company",
-      "phone"
+      "phone",
+      "campaignCode",
+      "cashbackLimit"
     ]
-  };
-  var fuse = new Fuse(data, param);
-  console.log("Search results:", results);
+  });
 
   return (<Layout>
     <Layout.Content
@@ -75,29 +85,27 @@ const ExampleSearch: React.FC<RouteComponentProps> = () => {
           </Select>
           <Search
             placeholder="検索"
-            onSearch={value => setResults(fuse.search(value))}
+            onSearch={value => setData({dataSet:fuse.search(value)})}
             style={{ margin: 5, width: 400 }} />
         </Col>
-        <List
-          itemLayout="vertical"
-          size="large"
-          pagination={{
-            onChange: page => {
-              console.log("PAGE:", page);
-            },
-            pageSize: 5,
-          }}
-          bordered
-          dataSource={results}
-          renderItem={item => <List.Item onClick={() => { console.log(item) }}
-          >
-            <List.Item.Meta
-              title={item.company}
-            />
-            {item.name.first + " " + item.name.last + " | " + item.phone}
-          </List.Item>}
-        />
+        <ExampleTable data={data.dataSet} onEdit={(editData: RandomData) => {
+          console.log("edit", editData)
+        }} onDelete={(deleteData: RandomData) => {
+          setData({dataSet : data.dataSet, toDelete : deleteData})
+        }}/>
       </Row>
+      <Modal
+          title="Delete item"
+          visible={data.toDelete != null}
+          onOk={() => {
+            setData({dataSet: data.dataSet.filter(obj => { return obj != data.toDelete })})
+          }}
+          onCancel={() => {
+            setData({dataSet : data.dataSet})
+          }}
+        >
+          <p>Are you sure you want to delete item?</p>
+        </Modal>
     </Layout.Content>
   </Layout>);
 }
