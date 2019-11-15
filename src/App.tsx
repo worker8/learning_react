@@ -24,35 +24,33 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
-const App: React.FC = () => {
-  const HomePath: React.FC<RouteComponentProps<{ sadasdsadsa: string }>> = ({
-    children
-  }) => {
-    const onClickHandler = (e: ClickParam): void => {
-      navigate(e.key);
-    };
-    return (
-      <div>
-        <PageHeader title="React Playground" />
-        <Menu
-          theme="light"
-          mode="horizontal"
-          onClick={onClickHandler}
-          // defaultSelectedKeys={["simple_counter"]}
-          style={{ lineHeight: "64px" }}
-        >
-          <Menu.Item key="simple_counter">Simple Counter</Menu.Item>
-          <Menu.Item key="simple_list">Simple List</Menu.Item>
-          <Menu.Item key="search">Search</Menu.Item>
-          <Menu.Item key="pagination">Pagination</Menu.Item>
-          <Menu.Item key="form">Form</Menu.Item>
-        </Menu>
-
-        <div>{children}</div>
-      </div>
-    );
+const HomePath: React.FC<RouteComponentProps> = ({ children }) => {
+  const onClickHandler = (e: ClickParam): void => {
+    navigate(e.key);
   };
+  return (
+    <div>
+      <PageHeader title="React Playground" />
+      <Menu
+        theme="light"
+        mode="horizontal"
+        onClick={onClickHandler}
+        // defaultSelectedKeys={["simple_counter"]}
+        style={{ lineHeight: "64px" }}
+      >
+        <Menu.Item key="simple_counter">Simple Counter</Menu.Item>
+        <Menu.Item key="simple_list">Simple List</Menu.Item>
+        <Menu.Item key="search">Search</Menu.Item>
+        <Menu.Item key="pagination">Pagination</Menu.Item>
+        <Menu.Item key="form">Form</Menu.Item>
+      </Menu>
 
+      <div>{children}</div>
+    </div>
+  );
+};
+
+const App: React.FC = () => {
   return (
     <ApolloProvider client={client}>
       <Router>

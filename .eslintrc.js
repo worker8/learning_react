@@ -15,7 +15,8 @@ module.exports = {
       // enable the rule specifically for TypeScript files
       files: ["*.ts", "*.tsx"],
       rules: {
-        "@typescript-eslint/explicit-function-return-type": ["off"]
+        "@typescript-eslint/explicit-function-return-type": ["off"],
+        "react/prop-types": ["off"]
       }
     }
   ],
