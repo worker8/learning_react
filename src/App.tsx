@@ -11,6 +11,7 @@ import ExamplePagination from "./ExamplePagination";
 import ExampleSearch from "./ExampleSearch";
 import SimpleCounter from "./SimpleCounter";
 import SimpleList from "./SimpleList";
+import GithubCRUDAuth from "./GithubCRUDAuth";
 
 const client = new ApolloClient({
   uri: "https://api.github.com/graphql",
@@ -43,6 +44,7 @@ const HomePath: React.FC<RouteComponentProps> = ({ children }) => {
         <Menu.Item key="search">Search</Menu.Item>
         <Menu.Item key="pagination">Pagination</Menu.Item>
         <Menu.Item key="form">Form</Menu.Item>
+        <Menu.Item key="github_crud_auth">Github Example</Menu.Item>
       </Menu>
 
       <div>{children}</div>
@@ -60,6 +62,8 @@ const App: React.FC = () => {
           <ExampleSearch path="search" />
           <ExamplePagination path="pagination" />
           <ExampleForm path="form" />
+          <GithubCRUDAuth path="github_crud_auth/:accessToken" />
+          <GithubCRUDAuth path="github_crud_auth/" />
         </HomePath>
       </Router>
     </ApolloProvider>
