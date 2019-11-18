@@ -1,5 +1,5 @@
 import { RouteComponentProps } from "@reach/router";
-import { List, Typography, PageHeader } from "antd";
+import { Icon, List, PageHeader } from "antd";
 import { gql } from "apollo-boost";
 import React from "react";
 import { useQuery } from "react-apollo";
@@ -11,13 +11,15 @@ interface GithubViewer {
     login: string;
     repositories: {
       edges: {
-        node: {
-          name: string;
-          id: string;
-        };
+        node: GithubRepository;
       }[];
     };
   };
+}
+interface GithubRepository {
+  name: string;
+  id: string;
+  description: string;
 }
 const SimpleList: React.FC<RouteComponentProps> = () => {
   const GET_MY_INFO = gql`
@@ -31,6 +33,7 @@ const SimpleList: React.FC<RouteComponentProps> = () => {
             node {
               name
               id
+              description
             }
           }
         }
@@ -47,32 +50,47 @@ const SimpleList: React.FC<RouteComponentProps> = () => {
   }
 
   if (error && !loading) {
-    return <div> ERRROR!!!!...</div>;
+    return <div> Ops, an error has occurred...</div>;
   }
-
-  let resultItems: string[];
-  let githubLoginHandler: string = "";
+  let resultItems: GithubRepository[];
+  let githubLoginHandler = "";
   if (!loading && responseData) {
     resultItems = responseData.viewer.repositories.edges.map(
-      edges => edges.node.name
+      edges => edges.node
     );
     githubLoginHandler = responseData.viewer.login;
+    return (
+      <div>
+        <PageHeader title={`${githubLoginHandler}'s Repositories`} />
+        <List
+          split={false}
+          itemLayout="vertical"
+          bordered
+          style={{ margin: 15 }}
+          dataSource={resultItems}
+          renderItem={githubRepo => {
+            return (
+              <List.Item
+                actions={[
+                  <span key={githubRepo.id}>
+                    <Icon type="edit" style={{ marginRight: 8 }} />
+                    Edit
+                  </span>
+                ]}
+              >
+                <List.Item.Meta
+                  title={githubRepo.name}
+                  description={githubRepo.description}
+                ></List.Item.Meta>
+              </List.Item>
+            );
+          }}
+        />
+      </div>
+    );
   }
 
-  return (
-    <div>
-      <PageHeader
-        title={`${githubLoginHandler}'s Repositories`}
-      />
-      <List
-        header={<div>Header</div>}
-        footer={<div>Footer</div>}
-        bordered
-        dataSource={resultItems!}
-        renderItem={item => <List.Item>{item}</List.Item>}
-      />
-    </div>
-  );
+  return <div></div>;
 };
 
 export default SimpleList;

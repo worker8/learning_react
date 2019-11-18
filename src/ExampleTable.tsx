@@ -1,63 +1,64 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent } from "react";
 import { Table, Divider, Button } from "antd";
 import { ColumnProps } from "antd/lib/table/";
-import { RandomData } from "./ExampleSearch"
+import { ShopData } from "./ExampleSearch";
 
-interface IRandomData {
-  data: RandomData[],
-  onEdit: (editData: RandomData) => void
-  onDelete: (deleteData: RandomData) => void
+interface RandomData {
+  data: ShopData[];
+  onEdit: (editData: ShopData) => void;
+  onDelete: (deleteData: ShopData) => void;
 }
 
-export const ExampleTable: FunctionComponent<IRandomData> = (data) => {
-  const tableColumns: ColumnProps<RandomData>[] = [
+export const ExampleTable: FunctionComponent<RandomData> = data => {
+  const shopAction: FunctionComponent<ShopData> = (item: ShopData) => {
+    return (
+      <span>
+        <Button type="primary" onClick={() => data.onEdit(item)}>
+          Edit
+        </Button>
+        <Divider type="vertical" />
+        <Button onClick={() => data.onDelete(item)}>Delete</Button>
+      </span>
+    );
+  };
+  const tableColumns: ColumnProps<ShopData>[] = [
     {
       title: "Login",
-      dataIndex: "login",
+      dataIndex: "login"
     },
     {
       title: "Phone number",
-      dataIndex: "phone",
+      dataIndex: "phone"
     },
     {
       title: "First name",
-      dataIndex: "name.first",
+      dataIndex: "name.first"
     },
     {
       title: "Last name",
-      dataIndex: "name.last",
+      dataIndex: "name.last"
     },
     {
       title: "Campaign",
       dataIndex: "campaignCode",
-      sorter: (a: RandomData, b: RandomData) => a.campaignCode - b.campaignCode,
-      sortDirections: ['ascend', 'descend']
+      sorter: (a: ShopData, b: ShopData) => a.campaignCode - b.campaignCode,
+      sortDirections: ["ascend", "descend"]
     },
     {
       title: "Cashback limit",
       dataIndex: "cashbackLimit",
-      sorter: (a: RandomData, b: RandomData) => a.cashbackLimit - b.cashbackLimit,
-      sortDirections: ['ascend', 'descend']
+      sorter: (a: ShopData, b: ShopData) => a.cashbackLimit - b.cashbackLimit,
+      sortDirections: ["ascend", "descend"]
     },
     {
       title: "Company",
-      dataIndex: "company",
+      dataIndex: "company"
     },
     {
-      title: 'Action',
-      key: 'action',
-      render: (item: RandomData) => (
-        <span>
-          <Button type="primary" onClick={() => data.onEdit(item)}>
-            Edit
-        </Button>
-          <Divider type="vertical" />
-          <Button onClick={() => data.onDelete(item)}>
-            Delete
-        </Button>
-        </span>
-      ),
-    },
+      title: "Action",
+      key: "action",
+      render: shopAction
+    }
   ];
   return <Table dataSource={data.data} columns={tableColumns} />;
 };
