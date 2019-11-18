@@ -1,5 +1,5 @@
 import { RouteComponentProps } from "@reach/router";
-import { List, Typography, PageHeader } from "antd";
+import { List, PageHeader } from "antd";
 import { gql } from "apollo-boost";
 import React from "react";
 import { useQuery } from "react-apollo";
@@ -51,28 +51,26 @@ const SimpleList: React.FC<RouteComponentProps> = () => {
   }
 
   let resultItems: string[];
-  let githubLoginHandler: string = "";
+  let githubLoginHandler = "";
   if (!loading && responseData) {
     resultItems = responseData.viewer.repositories.edges.map(
       edges => edges.node.name
     );
     githubLoginHandler = responseData.viewer.login;
+    return (
+      <div>
+        <PageHeader title={`${githubLoginHandler}'s Repositories`} />
+        <List
+          header={<div>Header</div>}
+          footer={<div>Footer</div>}
+          bordered
+          dataSource={resultItems}
+          renderItem={item => <List.Item>{item}</List.Item>}
+        />
+      </div>
+    );
   }
-
-  return (
-    <div>
-      <PageHeader
-        title={`${githubLoginHandler}'s Repositories`}
-      />
-      <List
-        header={<div>Header</div>}
-        footer={<div>Footer</div>}
-        bordered
-        dataSource={resultItems!}
-        renderItem={item => <List.Item>{item}</List.Item>}
-      />
-    </div>
-  );
+  return <div></div>;
 };
 
 export default SimpleList;

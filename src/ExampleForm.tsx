@@ -14,7 +14,7 @@ const ExampleForm: React.FC<RouteComponentProps> = () => {
         }}
       >
         <Typography.Text style={{ fontSize: 20 }}>
-          It's just a form
+          {"It\\'s just a form"}
         </Typography.Text>
       </Layout.Content>
     </Layout>
