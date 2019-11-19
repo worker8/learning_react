@@ -43,35 +43,27 @@ const App: React.FC = () => {
     "github_access_token",
     ""
   );
-  const [client, setClient] = useState(
-    new ApolloClient({
+  const createNewApolloClient = (accessToken: string) => {
+    return new ApolloClient({
       uri: "https://api.github.com/graphql",
       request: operation => {
         operation.setContext({
           headers: {
-            authorization: `Bearer ${githubAccessToken}`
+            authorization: `Bearer ${accessToken}`
           }
         });
       },
       cache: new InMemoryCache()
-    })
+    });
+  };
+
+  const [client, setClient] = useState(
+    createNewApolloClient(githubAccessToken)
   );
 
   const setClientAccessToken = (accesToken: string) => {
     setGithubAccessToken(accesToken);
-    setClient(
-      new ApolloClient({
-        uri: "https://api.github.com/graphql",
-        request: operation => {
-          operation.setContext({
-            headers: {
-              authorization: `Bearer ${accesToken}`
-            }
-          });
-        },
-        cache: new InMemoryCache()
-      })
-    );
+    setClient(createNewApolloClient(accesToken));
   };
 
   return (
