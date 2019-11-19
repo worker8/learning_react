@@ -12,13 +12,14 @@ import ExampleSearch from "./ExampleSearch";
 import SimpleCounter from "./SimpleCounter";
 import SimpleList from "./SimpleList";
 import GithubCRUDAuth from "./GithubCRUDAuth";
+import testFunc from "./Utility";
 
 const client = new ApolloClient({
   uri: "https://api.github.com/graphql",
   request: operation => {
     operation.setContext({
       headers: {
-        authorization: `Bearer ${GITHUB_TOKEN}`
+        // authorization: `Bearer ${GITHUB_TOKEN}`
       }
     });
   },
@@ -29,6 +30,7 @@ const HomePath: React.FC<RouteComponentProps> = ({ children }) => {
   const onClickHandler = (e: ClickParam): void => {
     navigate(e.key);
   };
+  testFunc();
   return (
     <div>
       <PageHeader title="React Playground" />
