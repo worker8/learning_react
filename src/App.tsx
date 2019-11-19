@@ -9,9 +9,8 @@ import "./App.css";
 import ExampleForm from "./ExampleForm";
 import ExamplePagination from "./ExamplePagination";
 import ExampleSearch from "./ExampleSearch";
-import GithubCRUDAuth from "./GithubCRUDAuth";
+import GithubExample from "./GithubExample";
 import SimpleCounter from "./SimpleCounter";
-import SimpleList from "./SimpleList";
 
 const HomePath: React.FC<RouteComponentProps> = ({ children }) => {
   const onClickHandler = (e: ClickParam): void => {
@@ -25,7 +24,6 @@ const HomePath: React.FC<RouteComponentProps> = ({ children }) => {
         theme="light"
         mode="horizontal"
         onClick={onClickHandler}
-        // defaultSelectedKeys={["simple_counter"]}
         style={{ lineHeight: "64px" }}
       >
         <Menu.Item key="simple_counter">Simple Counter</Menu.Item>
@@ -61,6 +59,7 @@ const App: React.FC = () => {
   );
 
   const setClientAccessToken = (accesToken: string) => {
+    setGithubAccessToken(accesToken);
     setClient(
       new ApolloClient({
         uri: "https://api.github.com/graphql",
@@ -81,19 +80,16 @@ const App: React.FC = () => {
       <Router>
         <HomePath path="/">
           <SimpleCounter default path="simple_counter" />
-          <SimpleList path="simple_list" />
           <ExampleSearch path="search" />
           <ExamplePagination path="pagination" />
           <ExampleForm path="form" />
-          <GithubCRUDAuth
+          <GithubExample
             setClientAccessToken={setClientAccessToken}
-            setGithubAccessToken={setGithubAccessToken}
             githubAccessToken={githubAccessToken}
             path="github_crud_auth/:accessToken"
           />
-          <GithubCRUDAuth
+          <GithubExample
             setClientAccessToken={setClientAccessToken}
-            setGithubAccessToken={setGithubAccessToken}
             githubAccessToken={githubAccessToken}
             path="github_crud_auth/"
           />

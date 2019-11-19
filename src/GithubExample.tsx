@@ -3,12 +3,12 @@ import { Button, Layout } from "antd";
 import axios from "axios";
 import React from "react";
 import "./App.css";
+import SimpleList from "./SimpleList";
 
 const { Content } = Layout;
 
-const GithubCRUDAuth: React.FC<RouteComponentProps<{
+const GithubExample: React.FC<RouteComponentProps<{
   setClientAccessToken: React.Dispatch<string>;
-  setGithubAccessToken: React.Dispatch<string>;
   githubAccessToken: string;
 }>> = props => {
   const githubClientId = "9306671c5493706d29c5";
@@ -32,26 +32,19 @@ const GithubCRUDAuth: React.FC<RouteComponentProps<{
       }).then(response => {
         const { data } = response;
 
-        if (
-          data &&
-          data.access_token &&
-          props.setGithubAccessToken &&
-          props.setClientAccessToken
-        ) {
-          props.setGithubAccessToken(data.access_token);
+        if (data && data.access_token && props.setClientAccessToken) {
           props.setClientAccessToken(data.access_token);
-
           console.log(`access_code: ${data.access_token}`);
         } else {
           console.log(props);
         }
       });
-      return <div> code = {paramArray[1]}</div>;
+      return <div> loading.... code = {paramArray[1]}</div>;
     }
   }
   if (props.githubAccessToken !== "") {
     console.log(props);
-    return <div> access token = {props.githubAccessToken}</div>;
+    return <SimpleList />;
   }
 
   console.log("else block");
@@ -70,4 +63,4 @@ const GithubCRUDAuth: React.FC<RouteComponentProps<{
   );
 };
 
-export default GithubCRUDAuth;
+export default GithubExample;
