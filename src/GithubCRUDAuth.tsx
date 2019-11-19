@@ -1,18 +1,26 @@
-import { RouteComponentProps, navigate } from "@reach/router";
+import { navigate, RouteComponentProps } from "@reach/router";
 import { Button, Layout } from "antd";
+import axios from "axios";
 import React from "react";
 import "./App.css";
-import axios from "axios";
 
 const { Content } = Layout;
 
-const GithubCRUDAuth: React.FC<RouteComponentProps> = props => {
+const GithubCRUDAuth: React.FC<RouteComponentProps<{
+  setClientAccessToken: React.Dispatch<string>;
+  setGithubAccessToken: React.Dispatch<string>;
+  githubAccessToken: string;
+}>> = props => {
   const githubClientId = "9306671c5493706d29c5";
 
-  if (props && props.location && props.location.search) {
+  if (
+    props &&
+    props.location &&
+    props.location.search &&
+    props.githubAccessToken === ""
+  ) {
     const paramArray = props.location.search.split("=");
-
-    if (paramArray[0] == "?code") {
+    if (paramArray[0] === "?code") {
       axios({
         method: "get",
         headers: {
@@ -23,11 +31,29 @@ const GithubCRUDAuth: React.FC<RouteComponentProps> = props => {
         url: `https://github-oauth-jr.herokuapp.com/submit_code/${paramArray[1]}`
       }).then(response => {
         const { data } = response;
-        console.log(`access_code: ${data.access_token!}`);
+
+        if (
+          data &&
+          data.access_token &&
+          props.setGithubAccessToken &&
+          props.setClientAccessToken
+        ) {
+          props.setGithubAccessToken(data.access_token);
+          props.setClientAccessToken(data.access_token);
+
+          console.log(`access_code: ${data.access_token}`);
+        } else {
+          console.log(props);
+        }
       });
-      return <div> code obtain {paramArray[1]}</div>;
+      return <div> code = {paramArray[1]}</div>;
     }
   }
+  if (props.githubAccessToken !== "") {
+    console.log(props);
+    return <div> access token = {props.githubAccessToken}</div>;
+  }
+
   console.log("else block");
   const oauthOnClick = () => {
     navigate(

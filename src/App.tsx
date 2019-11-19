@@ -2,35 +2,22 @@ import { navigate, RouteComponentProps, Router } from "@reach/router";
 import { Menu, PageHeader } from "antd";
 import { ClickParam } from "antd/lib/menu";
 import ApolloClient, { InMemoryCache } from "apollo-boost";
-import React from "react";
+import React, { useState } from "react";
 import { ApolloProvider } from "react-apollo";
+import useLocalStorage from "react-use-localstorage";
 import "./App.css";
-import GITHUB_TOKEN from "./Constants";
 import ExampleForm from "./ExampleForm";
 import ExamplePagination from "./ExamplePagination";
 import ExampleSearch from "./ExampleSearch";
+import GithubCRUDAuth from "./GithubCRUDAuth";
 import SimpleCounter from "./SimpleCounter";
 import SimpleList from "./SimpleList";
-import GithubCRUDAuth from "./GithubCRUDAuth";
-import testFunc from "./Utility";
-
-const client = new ApolloClient({
-  uri: "https://api.github.com/graphql",
-  request: operation => {
-    operation.setContext({
-      headers: {
-        // authorization: `Bearer ${GITHUB_TOKEN}`
-      }
-    });
-  },
-  cache: new InMemoryCache()
-});
 
 const HomePath: React.FC<RouteComponentProps> = ({ children }) => {
   const onClickHandler = (e: ClickParam): void => {
     navigate(e.key);
   };
-  testFunc();
+
   return (
     <div>
       <PageHeader title="React Playground" />
@@ -55,6 +42,40 @@ const HomePath: React.FC<RouteComponentProps> = ({ children }) => {
 };
 
 const App: React.FC = () => {
+  const [githubAccessToken, setGithubAccessToken] = useLocalStorage(
+    "github_access_token",
+    ""
+  );
+  const [client, setClient] = useState(
+    new ApolloClient({
+      uri: "https://api.github.com/graphql",
+      request: operation => {
+        operation.setContext({
+          headers: {
+            authorization: `Bearer ${githubAccessToken}`
+          }
+        });
+      },
+      cache: new InMemoryCache()
+    })
+  );
+
+  const setClientAccessToken = (accesToken: string) => {
+    setClient(
+      new ApolloClient({
+        uri: "https://api.github.com/graphql",
+        request: operation => {
+          operation.setContext({
+            headers: {
+              authorization: `Bearer ${accesToken}`
+            }
+          });
+        },
+        cache: new InMemoryCache()
+      })
+    );
+  };
+
   return (
     <ApolloProvider client={client}>
       <Router>
@@ -64,8 +85,18 @@ const App: React.FC = () => {
           <ExampleSearch path="search" />
           <ExamplePagination path="pagination" />
           <ExampleForm path="form" />
-          <GithubCRUDAuth path="github_crud_auth/:accessToken" />
-          <GithubCRUDAuth path="github_crud_auth/" />
+          <GithubCRUDAuth
+            setClientAccessToken={setClientAccessToken}
+            setGithubAccessToken={setGithubAccessToken}
+            githubAccessToken={githubAccessToken}
+            path="github_crud_auth/:accessToken"
+          />
+          <GithubCRUDAuth
+            setClientAccessToken={setClientAccessToken}
+            setGithubAccessToken={setGithubAccessToken}
+            githubAccessToken={githubAccessToken}
+            path="github_crud_auth/"
+          />
         </HomePath>
       </Router>
     </ApolloProvider>
