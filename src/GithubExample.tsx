@@ -34,25 +34,18 @@ const GithubExample: React.FC<RouteComponentProps<{
 
         if (data && data.access_token && props.setClientAccessToken) {
           props.setClientAccessToken(data.access_token);
-          console.log(`access_code: ${data.access_token}`);
-        } else {
-          console.log(props);
         }
       });
       return <div> loading.... code = {paramArray[1]}</div>;
     }
   }
   if (props.githubAccessToken !== "") {
-    console.log(props);
     return <SimpleList />;
   }
-
-  console.log("else block");
   const oauthOnClick = () => {
     navigate(
       `https://github.com/login/oauth/authorize?client_id=${githubClientId}`
     );
-    console.log("clicked!");
   };
   return (
     <Layout>

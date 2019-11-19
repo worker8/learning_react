@@ -27,7 +27,6 @@ const HomePath: React.FC<RouteComponentProps> = ({ children }) => {
         style={{ lineHeight: "64px" }}
       >
         <Menu.Item key="simple_counter">Simple Counter</Menu.Item>
-        <Menu.Item key="simple_list">Simple List</Menu.Item>
         <Menu.Item key="search">Search</Menu.Item>
         <Menu.Item key="pagination">Pagination</Menu.Item>
         <Menu.Item key="form">Form</Menu.Item>
