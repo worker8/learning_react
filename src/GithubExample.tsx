@@ -1,31 +1,18 @@
 import { navigate, RouteComponentProps } from "@reach/router";
-import { Button, Layout } from "antd";
+import { Button, Layout, Skeleton, Avatar, Row } from "antd";
 import axios from "axios";
 import React from "react";
 import "./App.css";
 import SimpleList from "./SimpleList";
 
-const { Content } = Layout;
-const LoginButton: React.FC<RouteComponentProps> = () => {
-  const githubClientId = "9306671c5493706d29c5";
-  const oauthOnClick = () => {
-    navigate(
-      `https://github.com/login/oauth/authorize?client_id=${githubClientId}`
-    );
-  };
-  return (
-    <Layout>
-      <Content>
-        <Button onClick={oauthOnClick}>Github OAuth</Button>
-      </Content>
-    </Layout>
-  );
-};
-
-const GithubExample: React.FC<RouteComponentProps<{
+interface GithubExampleProps {
   setClientAccessToken: React.Dispatch<string>;
   githubAccessToken: string;
-}>> = props => {
+}
+
+const GithubExample: React.FC<RouteComponentProps<
+  GithubExampleProps
+>> = props => {
   if (
     props &&
     props.location &&
@@ -47,15 +34,60 @@ const GithubExample: React.FC<RouteComponentProps<{
 
         if (data && data.access_token && props.setClientAccessToken) {
           props.setClientAccessToken(data.access_token);
+          navigate("/github_crud_auth");
         }
       });
-      return <div> loading.... code = {paramArray[1]}</div>;
+      return (
+        <div style={{ margin: 16 }}>
+          <Skeleton />
+        </div>
+      );
     }
   }
   if (props.githubAccessToken !== "") {
-    return <SimpleList />;
+    return (
+      <Layout>
+        <Layout.Content>
+          <SimpleList />
+          <Button
+            style={{ margin: 16 }}
+            onClick={() => {
+              if (props && props.setClientAccessToken) {
+                props.setClientAccessToken("");
+              }
+            }}
+          >
+            Logout Button
+          </Button>
+        </Layout.Content>
+      </Layout>
+    );
   }
   return <LoginButton />;
+};
+
+const LoginButton: React.FC<RouteComponentProps> = () => {
+  const githubClientId = "9306671c5493706d29c5";
+  const oauthOnClick = () => {
+    navigate(
+      `https://github.com/login/oauth/authorize?client_id=${githubClientId}`
+    );
+  };
+  return (
+    <Layout>
+      <Layout.Content style={{ padding: 16 }}>
+        <Row>
+          <img
+            alt="Github logo"
+            src="https://image.flaticon.com/icons/png/128/25/25231.png"
+          />
+        </Row>
+        <Row style={{ paddingTop: 10 }}>
+          <Button onClick={oauthOnClick}>Github OAuth</Button>
+        </Row>
+      </Layout.Content>
+    </Layout>
+  );
 };
 
 export default GithubExample;

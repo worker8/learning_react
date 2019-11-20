@@ -1,9 +1,10 @@
 import { RouteComponentProps } from "@reach/router";
-import { Icon, List, PageHeader } from "antd";
+import { Icon, List, PageHeader, Skeleton, Layout } from "antd";
 import { gql } from "apollo-boost";
 import React from "react";
 import { useQuery } from "react-apollo";
 import "./App.css";
+
 interface GithubViewer {
   viewer: {
     id: string;
@@ -46,11 +47,21 @@ const SimpleList: React.FC<RouteComponentProps> = () => {
   );
 
   if (loading) {
-    return <div> loading...</div>;
+    return (
+      <Layout>
+        <Layout.Content>
+          <Skeleton />
+        </Layout.Content>
+      </Layout>
+    );
   }
 
   if (error && !loading) {
-    return <div> Ops, an error has occurred...</div>;
+    return (
+      <Layout>
+        <Layout.Content>Opps, an error has occurred...</Layout.Content>
+      </Layout>
+    );
   }
   let resultItems: GithubRepository[];
   let githubLoginHandler = "";
@@ -60,33 +71,35 @@ const SimpleList: React.FC<RouteComponentProps> = () => {
     );
     githubLoginHandler = responseData.viewer.login;
     return (
-      <div>
-        <PageHeader title={`${githubLoginHandler}'s Repositories`} />
-        <List
-          split={false}
-          itemLayout="vertical"
-          bordered
-          style={{ margin: 15 }}
-          dataSource={resultItems}
-          renderItem={githubRepo => {
-            return (
-              <List.Item
-                actions={[
-                  <span key={githubRepo.id}>
-                    <Icon type="edit" style={{ marginRight: 8 }} />
-                    Edit
-                  </span>
-                ]}
-              >
-                <List.Item.Meta
-                  title={githubRepo.name}
-                  description={githubRepo.description}
-                ></List.Item.Meta>
-              </List.Item>
-            );
-          }}
-        />
-      </div>
+      <Layout>
+        <Layout.Content>
+          <PageHeader title={`${githubLoginHandler}'s Repositories`} />
+          <List
+            split={false}
+            itemLayout="vertical"
+            bordered
+            style={{ margin: 15 }}
+            dataSource={resultItems}
+            renderItem={githubRepo => {
+              return (
+                <List.Item
+                  actions={[
+                    <span key={githubRepo.id}>
+                      <Icon type="edit" style={{ marginRight: 8 }} />
+                      Edit
+                    </span>
+                  ]}
+                >
+                  <List.Item.Meta
+                    title={githubRepo.name}
+                    description={githubRepo.description}
+                  ></List.Item.Meta>
+                </List.Item>
+              );
+            }}
+          />
+        </Layout.Content>
+      </Layout>
     );
   }
 

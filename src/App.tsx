@@ -60,7 +60,6 @@ const App: React.FC = () => {
   const [client, setClient] = useState(
     createNewApolloClient(githubAccessToken)
   );
-
   const setClientAccessToken = (accesToken: string) => {
     setGithubAccessToken(accesToken);
     setClient(createNewApolloClient(accesToken));
