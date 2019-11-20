@@ -6,13 +6,26 @@ import "./App.css";
 import SimpleList from "./SimpleList";
 
 const { Content } = Layout;
+const LoginButton: React.FC<RouteComponentProps> = () => {
+  const githubClientId = "9306671c5493706d29c5";
+  const oauthOnClick = () => {
+    navigate(
+      `https://github.com/login/oauth/authorize?client_id=${githubClientId}`
+    );
+  };
+  return (
+    <Layout>
+      <Content>
+        <Button onClick={oauthOnClick}>Github OAuth</Button>
+      </Content>
+    </Layout>
+  );
+};
 
 const GithubExample: React.FC<RouteComponentProps<{
   setClientAccessToken: React.Dispatch<string>;
   githubAccessToken: string;
 }>> = props => {
-  const githubClientId = "9306671c5493706d29c5";
-
   if (
     props &&
     props.location &&
@@ -42,18 +55,7 @@ const GithubExample: React.FC<RouteComponentProps<{
   if (props.githubAccessToken !== "") {
     return <SimpleList />;
   }
-  const oauthOnClick = () => {
-    navigate(
-      `https://github.com/login/oauth/authorize?client_id=${githubClientId}`
-    );
-  };
-  return (
-    <Layout>
-      <Content>
-        <Button onClick={oauthOnClick}>Github OAuth</Button>
-      </Content>
-    </Layout>
-  );
+  return <LoginButton />;
 };
 
 export default GithubExample;
