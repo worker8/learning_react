@@ -76,7 +76,7 @@ const App: React.FC = () => {
           <GithubExample
             setClientAccessToken={setClientAccessToken}
             githubAccessToken={githubAccessToken}
-            path="github_crud_auth/:accessToken"
+            path="github_crud_auth/:code"
           />
           <GithubExample
             setClientAccessToken={setClientAccessToken}

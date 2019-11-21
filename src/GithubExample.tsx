@@ -46,24 +46,38 @@ const GithubExample: React.FC<RouteComponentProps<
   }
   if (props.githubAccessToken !== "") {
     return (
-      <Layout>
-        <Layout.Content>
-          <SimpleList />
-          <Button
-            style={{ margin: 16 }}
-            onClick={() => {
-              if (props && props.setClientAccessToken) {
-                props.setClientAccessToken("");
-              }
-            }}
-          >
-            Logout Button
-          </Button>
-        </Layout.Content>
-      </Layout>
+      <GithubList
+        clearAccessToken={() => {
+          if (props && props.setClientAccessToken) {
+            props.setClientAccessToken("");
+          }
+        }}
+      />
     );
   }
   return <LoginButton />;
+};
+
+const GithubList: React.FC<RouteComponentProps<{
+  clearAccessToken: () => void;
+}>> = props => {
+  return (
+    <Layout>
+      <Layout.Content>
+        <SimpleList />
+        <Button
+          style={{ margin: 16 }}
+          onClick={() => {
+            if (props && props.clearAccessToken) {
+              props.clearAccessToken();
+            }
+          }}
+        >
+          Logout Button
+        </Button>
+      </Layout.Content>
+    </Layout>
+  );
 };
 
 const LoginButton: React.FC<RouteComponentProps> = () => {
