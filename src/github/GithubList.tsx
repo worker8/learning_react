@@ -1,9 +1,8 @@
 import { RouteComponentProps } from "@reach/router";
-import { Icon, List, PageHeader, Skeleton, Layout } from "antd";
+import { Icon, List, PageHeader, Skeleton, Layout, Button } from "antd";
 import { gql } from "apollo-boost";
 import React from "react";
 import { useQuery } from "react-apollo";
-import "./App.css";
 
 interface GithubViewer {
   viewer: {
@@ -22,7 +21,10 @@ interface GithubRepository {
   id: string;
   description: string;
 }
-const SimpleList: React.FC<RouteComponentProps> = () => {
+
+const GithubList: React.FC<RouteComponentProps<{
+  clearAccessToken: () => void;
+}>> = props => {
   const GET_MY_INFO = gql`
     {
       viewer {
@@ -98,6 +100,16 @@ const SimpleList: React.FC<RouteComponentProps> = () => {
               );
             }}
           />
+          <Button
+            style={{ margin: 16 }}
+            onClick={() => {
+              if (props && props.clearAccessToken) {
+                props.clearAccessToken();
+              }
+            }}
+          >
+            Logout Button
+          </Button>
         </Layout.Content>
       </Layout>
     );
@@ -106,4 +118,4 @@ const SimpleList: React.FC<RouteComponentProps> = () => {
   return <div></div>;
 };
 
-export default SimpleList;
+export default GithubList;

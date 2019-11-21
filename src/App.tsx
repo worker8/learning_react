@@ -9,8 +9,9 @@ import "./App.css";
 import ExampleForm from "./ExampleForm";
 import ExamplePagination from "./ExamplePagination";
 import ExampleSearch from "./ExampleSearch";
-import GithubExample from "./GithubExample";
+import GithubExample from "./github/GithubExample";
 import SimpleCounter from "./SimpleCounter";
+import GithubCodeReceiver from "./github/GithubCodeReceiver";
 
 const HomePath: React.FC<RouteComponentProps> = ({ children }) => {
   const onClickHandler = (e: ClickParam): void => {
@@ -73,10 +74,10 @@ const App: React.FC = () => {
           <ExampleSearch path="search" />
           <ExamplePagination path="pagination" />
           <ExampleForm path="form" />
-          <GithubExample
+          <GithubCodeReceiver
             setClientAccessToken={setClientAccessToken}
             githubAccessToken={githubAccessToken}
-            path="github_crud_auth/:code"
+            path="github_crud_auth_code"
           />
           <GithubExample
             setClientAccessToken={setClientAccessToken}
