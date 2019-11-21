@@ -22,3 +22,7 @@
 .App-link {
   color: #09d3ac;
 }
+
+.ant-layout-content {
+  background: white;
+}
