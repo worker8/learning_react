@@ -1,13 +1,17 @@
-import { Layout, Row, Button } from "antd";
-import React from "react";
 import { navigate, RouteComponentProps } from "@reach/router";
+import { Button, Layout, Row } from "antd";
+import React from "react";
+import isProduction from "../Utility";
 
 const GithubGuestPage: React.FC<RouteComponentProps> = () => {
-  const githubClientId = "9306671c5493706d29c5";
+  const devGithubClientId = "361c01054653ab0ca914";
+  const prodGithubClientId = "9306671c5493706d29c5";
   const oauthOnClick = () => {
-    navigate(
-      `https://github.com/login/oauth/authorize?client_id=${githubClientId}`
-    );
+    let clientId = devGithubClientId;
+    if (isProduction()) {
+      clientId = prodGithubClientId;
+    }
+    navigate(`https://github.com/login/oauth/authorize?client_id=${clientId}`);
   };
   return (
     <Layout>

@@ -16,6 +16,7 @@ const GithubCodeReceiver: React.FC<RouteComponentProps<
     props.githubAccessToken === ""
   ) {
     const paramArray = props.location.search.split("=");
+
     if (paramArray[0] === "?code") {
       axios({
         method: "get",
@@ -24,7 +25,8 @@ const GithubCodeReceiver: React.FC<RouteComponentProps<
           "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
           "Access-Control-Allow-Headers": "Content-Type, Authorization"
         },
-        url: `https://github-oauth-jr.herokuapp.com/submit_code/${paramArray[1]}`
+        url: `https://github-oauth-jr.herokuapp.com/submit_code/${paramArray[1]}?env=${process.env.NODE_ENV}`
+        // url: `http://localhost:4000/submit_code/${paramArray[1]}?env=${process.env.NODE_ENV}` // for testing locally
       }).then(response => {
         const { data } = response;
 
